@@ -57,8 +57,8 @@ void ofApp::update(){
 			ofVec4f tireTempData;
 
 			carCoordinates.x = acsGraphicsData->carCoordinates[0];
-			carCoordinates.y = acsGraphicsData->carCoordinates[1];
-			carCoordinates.z = acsGraphicsData->carCoordinates[2];
+			carCoordinates.y = acsGraphicsData->carCoordinates[2];
+			carCoordinates.z = acsGraphicsData->carCoordinates[1];
 
 			accGData.x = acsPhysicsData->accG[0];
 			accGData.y = acsPhysicsData->accG[1];
@@ -85,7 +85,7 @@ void ofApp::update(){
 
 			telemetry.push2Telemetry(tData);
 
-			carPos.addVertex(acsGraphicsData->carCoordinates[0], acsGraphicsData->carCoordinates[1], acsGraphicsData->carCoordinates[2]);
+			carPos.addVertex(acsGraphicsData->carCoordinates[0]/2, acsGraphicsData->carCoordinates[2]/2, acsGraphicsData->carCoordinates[1]/2);
 		}
 
 		lastOscSentTimer = ofGetElapsedTimeMillis();
@@ -341,8 +341,8 @@ void ofApp::sendOscMessage(){
 	sendFloatTelemetryMessage("/telemetry/roll", acsPhysicsData->roll);
 
 	sendFloatTelemetryMessage("telemetry/carCoordinates/x", acsGraphicsData->carCoordinates[0]);
-	sendFloatTelemetryMessage("telemetry/carCoordinates/y", acsGraphicsData->carCoordinates[1]);
-	sendFloatTelemetryMessage("telemetry/carCoordinates/z", acsGraphicsData->carCoordinates[2]);
+	sendFloatTelemetryMessage("telemetry/carCoordinates/y", acsGraphicsData->carCoordinates[2]);
+	sendFloatTelemetryMessage("telemetry/carCoordinates/z", acsGraphicsData->carCoordinates[1]);
 	
 	// accG
 	sendFloatTelemetryMessage("/telemetry/accG/x", acsPhysicsData->accG[0]);
@@ -385,6 +385,7 @@ void ofApp::keyPressed(int key){
 		case 'f':
 			if (bRecordOn) {
 				telemetry.export2Json();
+				carPos.clear();
 				bRecordOn = false;
 			}
 			break;
