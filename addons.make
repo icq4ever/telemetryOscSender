@@ -1,3 +1,4 @@
 ofxDatGui
+ofxJSON
 ofxOsc
 ofxSharedMemory

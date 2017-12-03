@@ -17,6 +17,8 @@ void ofApp::setup(){
 	sender.setup(HOST, PORT);
 	lastOscSentTimer = ofGetElapsedTimeMillis();
 
+	bRecordOn = false;
+
 }
 
 //--------------------------------------------------------------
@@ -34,8 +36,49 @@ void ofApp::update(){
 	if (ofGetElapsedTimeMillis() - lastOscSentTimer > 50) {
 		sendOscMessage();
 
+		if (bRecordOn) {
+
+			tData.gear = acsPhysicsData->gear;
+			tData.rpm = acsPhysicsData->rpms;
+			tData.speedKmh = acsPhysicsData->speedKmh;
+			tData.drsAvailable = acsPhysicsData->drsAvailable;
+			tData.drsEnabled = acsPhysicsData->drsEnabled;
+			//acsPhysicsData->drsAvailable == 1 ? tData.drsAvailable = true : tData.drsAvailable = false;
+			//acsPhysicsData->drsEnabled == 1 ? tData.drsEnabled = true : tData.drsEnabled = false;
+
+			ofVec3f accGData;
+			ofVec3f velocityData;
+			ofVec4f tireTempData;
+
+			accGData.x = acsPhysicsData->accG[0];
+			accGData.y = acsPhysicsData->accG[1];
+			accGData.z = acsPhysicsData->accG[2];
+
+			velocityData.x = acsPhysicsData->velocity[0];
+			velocityData.y = acsPhysicsData->velocity[1];
+			velocityData.z = acsPhysicsData->velocity[2];
+
+			tireTempData.x = acsPhysicsData->tyreCoreTemperature[0];
+			tireTempData.y = acsPhysicsData->tyreCoreTemperature[1];
+			tireTempData.z = acsPhysicsData->tyreCoreTemperature[2];
+			tireTempData.w = acsPhysicsData->tyreCoreTemperature[3];
+
+			tData.accG = accGData;
+			tData.velocity = velocityData;
+			tData.tireTemp = tireTempData;
+
+			tData.throttle = acsPhysicsData->gas;
+			tData.brake = acsPhysicsData->brake;
+			tData.clutch = acsPhysicsData->clutch;
+			tData.steerAngle = acsPhysicsData->steerAngle;
+
+			telemetry.push2Telemetry(tData);
+		}
+
 		lastOscSentTimer = ofGetElapsedTimeMillis();
 	}
+
+	
 
 }
 
@@ -299,7 +342,21 @@ void ofApp::sendOscMessage(){
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){ }
+void ofApp::keyPressed(int key){ 
+	switch (key) {
+		case 'r':
+		case 'R':
+			bRecordOn = true;
+			break;
+		case 'F':
+		case 'f':
+			if (bRecordOn) {
+				telemetry.export2Json();
+				bRecordOn = false;
+			}
+			break;
+	}
+}
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){ }
 //--------------------------------------------------------------

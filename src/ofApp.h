@@ -10,6 +10,7 @@
 #include "r3e.h"
 #include "utils.h"
 #include <atlconv.h>
+#include "telemetry.h"
 
 class ofApp : public ofBaseApp{
 
@@ -29,6 +30,8 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+
+	bool bRecordOn;
 	
 
 	/* ACS Telemetry */
@@ -61,8 +64,10 @@ public:
 	void sendStringTelemetryMessage(string addressEndpoint, string value);
 	void sendBoolTelemetryMessage(string addressEndpoint, bool value);
 
-
 	/* util */
 	string	wstring2string(wstring wstr);
 	wstring string2wstring(string str);
+
+	telemetryData tData;
+	Telemetry telemetry;
 };
