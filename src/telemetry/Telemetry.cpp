@@ -30,7 +30,23 @@ void Telemetry::export2Json() {
 		json["telemetry"]["datas"][i]["speedKmh"] = telemetryBuffers[i].speedKmh;
 		json["telemetry"]["datas"][i]["drsAvailable"] = telemetryBuffers[i].drsAvailable;
 		json["telemetry"]["datas"][i]["drsEnabled"] = telemetryBuffers[i].drsEnabled;
-													 
+		
+		/*
+		float heading;	// heading of the car on world coord
+		float pitch;	// pitch of the car on world coord
+		float roll;		// roll of the car on world coord
+		ofVec3f carCoordinates;		// car position on world coord(x,y,z)								
+		*/
+
+		json["telemetry"]["datas"][i]["heading"] = telemetryBuffers[i].heading;
+		json["telemetry"]["datas"][i]["pitch"] = telemetryBuffers[i].pitch;
+		json["telemetry"]["datas"][i]["roll"] = telemetryBuffers[i].roll;
+
+		json["telemetry"]["datas"][i]["carCoordinates"]["x"] = telemetryBuffers[i].carCoordinates.x;
+		json["telemetry"]["datas"][i]["carCoordinates"]["y"] = telemetryBuffers[i].carCoordinates.y;
+		json["telemetry"]["datas"][i]["carCoordinates"]["z"] = telemetryBuffers[i].carCoordinates.z;
+
+
 		json["telemetry"]["datas"][i]["accG"]["x"] = telemetryBuffers[i].accG.x;
 		json["telemetry"]["datas"][i]["accG"]["y"] = telemetryBuffers[i].accG.y;
 		json["telemetry"]["datas"][i]["accG"]["z"] = telemetryBuffers[i].accG.z;

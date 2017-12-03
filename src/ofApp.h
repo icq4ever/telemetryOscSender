@@ -61,6 +61,7 @@ public:
 
 	void sendIntTelemetryMessage(string addressEndpoint, int value);
 	void sendFloatTelemetryMessage(string addressEndpoint, float value);
+
 	void sendStringTelemetryMessage(string addressEndpoint, string value);
 	void sendBoolTelemetryMessage(string addressEndpoint, bool value);
 
@@ -70,4 +71,6 @@ public:
 
 	telemetryData tData;
 	Telemetry telemetry;
+	ofPolyline carPos;
+
 };

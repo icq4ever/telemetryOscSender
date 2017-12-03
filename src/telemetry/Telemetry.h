@@ -8,6 +8,11 @@ struct telemetryData{
 	int speedKmh;
 	int drsAvailable;
 	int drsEnabled;
+
+	float heading;	// heading of the car on world coord
+	float pitch;	// pitch of the car on world coord
+	float roll;		// roll of the car on world coord
+	ofVec3f carCoordinates;		// car position on world coord(x,y,z)
 	ofVec3f accG;
 	ofVec3f velocity;
 	ofVec4f tireTemp;
@@ -28,53 +33,12 @@ public:
 	float lastLapTimeMillis;
 	float bestLapTimeMillis;
 
+	// telemetry Buffer
 	vector<telemetryData> telemetryBuffers;
-
-	// car status
-	//vector<int> gear;
-	//vector<int> rpms;
-	//vector<int> speedKmh;
-	//vector<bool> drsAvailable;
-	//vector<bool> drsEnabled;
-	//vector<ofVec3f> accG;
-	//vector<ofVec3f> velocity;
-	//vector<ofVec4f> tireTemp;
-
-	//// controller information
-	//vector<float> throttle;
-	//vector<float> brake;
-	//vector<float> clutch;
-	//vector<float> steerAngle;
 
 	void push2Telemetry(telemetryData data);
 	void export2Json();
-	/*void push2Telemetry(int _gear,
-		int _rpms,
-		int _speedKmh,
-		int _drsAvailable,
-		int _drsEnabled,
-		ofVec3f _accG,
-		ofVec3f _velocity,
-		ofVec4f _tireTemp,
 
-		float _throttle,
-		float _brake,
-		float _clutch,
-		float _steerAngle
-	) {
-		gear.push_back(_gear);
-		rpms.push_back(_rpms);
-		speedKmh.push_back(_speedKmh);
-		drsAvailable.push_back(_drsAvailable);
-		drsEnabled.push_back(_drsEnabled);
-		accG.push_back(_accG);
-		velocity.push_back(_velocity);
-		tireTemp.push_back(_tireTemp);
-		throttle.push_back(_throttle);
-		brake.push_back(_brake);
-		clutch.push_back(_clutch);
-		steerAngle.push_back(_steerAngle);
-	}*/
 
 
 

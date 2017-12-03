@@ -19,6 +19,7 @@ void ofApp::setup(){
 
 	bRecordOn = false;
 
+
 }
 
 //--------------------------------------------------------------
@@ -46,9 +47,18 @@ void ofApp::update(){
 			//acsPhysicsData->drsAvailable == 1 ? tData.drsAvailable = true : tData.drsAvailable = false;
 			//acsPhysicsData->drsEnabled == 1 ? tData.drsEnabled = true : tData.drsEnabled = false;
 
+			tData.heading = acsPhysicsData->heading;
+			tData.pitch = acsPhysicsData->pitch;
+			tData.roll = acsPhysicsData->roll;
+
+			ofVec3f carCoordinates;
 			ofVec3f accGData;
 			ofVec3f velocityData;
 			ofVec4f tireTempData;
+
+			carCoordinates.x = acsGraphicsData->carCoordinates[0];
+			carCoordinates.y = acsGraphicsData->carCoordinates[1];
+			carCoordinates.z = acsGraphicsData->carCoordinates[2];
 
 			accGData.x = acsPhysicsData->accG[0];
 			accGData.y = acsPhysicsData->accG[1];
@@ -63,6 +73,7 @@ void ofApp::update(){
 			tireTempData.z = acsPhysicsData->tyreCoreTemperature[2];
 			tireTempData.w = acsPhysicsData->tyreCoreTemperature[3];
 
+			tData.carCoordinates = carCoordinates;
 			tData.accG = accGData;
 			tData.velocity = velocityData;
 			tData.tireTemp = tireTempData;
@@ -73,6 +84,8 @@ void ofApp::update(){
 			tData.steerAngle = acsPhysicsData->steerAngle;
 
 			telemetry.push2Telemetry(tData);
+
+			carPos.addVertex(acsGraphicsData->carCoordinates[0], acsGraphicsData->carCoordinates[1], acsGraphicsData->carCoordinates[2]);
 		}
 
 		lastOscSentTimer = ofGetElapsedTimeMillis();
@@ -88,6 +101,18 @@ void ofApp::draw(){
 	printAcsGraphics(20, 20);
 	printAcsPhysics(420, 20);
 	printAcsStatic(920, 20);
+
+	if (bRecordOn) {
+		ofPushMatrix();
+		ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
+		ofPushStyle();
+		ofNoFill();
+		ofSetLineWidth(5);
+		ofSetHexColor(0xFF0000);
+		carPos.draw();
+		ofPopStyle();
+		ofPopMatrix();
+	}
 }
 
 void ofApp::printAcsPhysics(float x, float y) {
@@ -310,6 +335,14 @@ void ofApp::sendOscMessage(){
 	sendIntTelemetryMessage("/telemetry/gear", acsPhysicsData->gear);
 	sendIntTelemetryMessage("/telemetry/rpms", acsPhysicsData->rpms);
 	sendFloatTelemetryMessage("/telemetry/speedKmh", acsPhysicsData->speedKmh);
+
+	sendFloatTelemetryMessage("/telemetry/heading", acsPhysicsData->heading);
+	sendFloatTelemetryMessage("/telemetry/pitch", acsPhysicsData->pitch);
+	sendFloatTelemetryMessage("/telemetry/roll", acsPhysicsData->roll);
+
+	sendFloatTelemetryMessage("telemetry/carCoordinates/x", acsGraphicsData->carCoordinates[0]);
+	sendFloatTelemetryMessage("telemetry/carCoordinates/y", acsGraphicsData->carCoordinates[1]);
+	sendFloatTelemetryMessage("telemetry/carCoordinates/z", acsGraphicsData->carCoordinates[2]);
 	
 	// accG
 	sendFloatTelemetryMessage("/telemetry/accG/x", acsPhysicsData->accG[0]);
