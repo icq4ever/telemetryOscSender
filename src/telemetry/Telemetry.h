@@ -1,6 +1,11 @@
 #pragma once
 #include "ofMain.h"
 #include "ofxJSON.h"
+#include "ofxOsc.h"
+
+#define HOST "192.168.100.255"
+#define PORT 9000
+
 
 struct telemetryData{
 	int gear;
@@ -8,6 +13,7 @@ struct telemetryData{
 	int speedKmh;
 	int drsAvailable;
 	int drsEnabled;
+	float normalizedCarPosition;
 
 	float heading;	// heading of the car on world coord
 	float pitch;	// pitch of the car on world coord
@@ -21,6 +27,7 @@ struct telemetryData{
 	float brake;
 	float clutch;
 	float steerAngle;
+	int iCurrentTime;
 };
 
 class Telemetry {
@@ -30,17 +37,36 @@ public:
 	~Telemetry();
 
 	int completedLaps;
+	string lastTime;
+	string bestTime;
 	float lastLapTimeMillis;
 	float bestLapTimeMillis;
+
+	float maxTorque;
+	int maxRpm;
+	int hasDRS;
+	int hasERS;
 
 	// telemetry Buffer
 	vector<telemetryData> telemetryBuffers;
 
 	void push2Telemetry(telemetryData data);
 	void export2Json();
+	
+	void importJson(string fileName);
+	bool isFileLoaded = false;
+
+	void playLog();
+	uint64_t lastPlayedTimer;
+	unsigned int logPlayHead;
 
 
+	void sendIntTelemetryMessage(string addressEndpoint, int value);
+	void sendFloatTelemetryMessage(string addressEndpoint, float value);
 
-
+	void sendStringTelemetryMessage(string addressEndpoint, string value);
+	void sendBoolTelemetryMessage(string addressEndpoint, bool value);
+	
+	ofxOscSender sender;
 };
 

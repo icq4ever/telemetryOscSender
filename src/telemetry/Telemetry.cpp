@@ -3,6 +3,7 @@
 
 
 Telemetry::Telemetry() {
+	sender.setup(HOST, PORT);
 }
 
 
@@ -30,7 +31,8 @@ void Telemetry::export2Json() {
 		json["telemetry"]["datas"][i]["speedKmh"] = telemetryBuffers[i].speedKmh;
 		json["telemetry"]["datas"][i]["drsAvailable"] = telemetryBuffers[i].drsAvailable;
 		json["telemetry"]["datas"][i]["drsEnabled"] = telemetryBuffers[i].drsEnabled;
-		
+		json["telemetry"]["datas"][i]["normalizedCarPosition"] = telemetryBuffers[i].normalizedCarPosition;
+		json["telemetry"]["datas"][i]["iCurrentTime"] = telemetryBuffers[i].iCurrentTime;
 		/*
 		float heading;	// heading of the car on world coord
 		float pitch;	// pitch of the car on world coord
@@ -69,4 +71,169 @@ void Telemetry::export2Json() {
 	if (!json.save(file, true)) {
 		ofLogNotice("save logs") << "log json failed";
 	}
+}
+
+void Telemetry::importJson(string fileName) {
+	telemetryBuffers.clear();
+
+	ofxJSONElement json;
+	bool loadSuccessful;
+
+	loadSuccessful = json.open("telemetryLogs/" + fileName + ".json");
+
+	if (loadSuccessful) {
+		completedLaps = json["telemetry"]["laps"].asInt() - 1;
+
+
+		for (unsigned int i = 0; i < json["telemetry"]["datas"].size(); i++) {
+			telemetryData tData;
+			tData.iCurrentTime = json["telemetry"]["datas"][i]["iCurrentTime"].asInt();
+			tData.gear = json["telemetry"]["datas"][i]["gear"].asInt();
+			tData.rpm = json["telemetry"]["datas"][i]["rpm"].asInt();
+			tData.speedKmh = json["telemetry"]["datas"][i]["speedKmh"].asInt();
+			tData.drsAvailable = json["telemetry"]["datas"][i]["drsAvailable"].asInt();
+			tData.drsEnabled = json["telemetry"]["datas"][i]["drsEnabled"].asInt();
+			tData.normalizedCarPosition = json["telemetry"]["datas"][i]["normalizedCarPosition"].asFloat();
+
+			tData.heading = json["telemetry"]["datas"][i]["heading"].asFloat();
+			tData.pitch = json["telemetry"]["datas"][i]["pitch"].asFloat();
+			tData.roll = json["telemetry"]["datas"][i]["roll"].asFloat();
+
+			tData.carCoordinates.x = json["telemetry"]["datas"][i]["carCoordinates"]["x"].asFloat();
+			tData.carCoordinates.y = json["telemetry"]["datas"][i]["carCoordinates"]["y"].asFloat();
+			tData.carCoordinates.z = json["telemetry"]["datas"][i]["carCoordinates"]["z"].asFloat();
+
+			tData.accG.x = json["telemetry"]["datas"][i]["accG"]["x"].asFloat();
+			tData.accG.y = json["telemetry"]["datas"][i]["accG"]["y"].asFloat();
+			tData.accG.z = json["telemetry"]["datas"][i]["accG"]["z"].asFloat();
+
+			tData.velocity.x = json["telemetry"]["datas"][i]["velocity"]["x"].asFloat();
+			tData.velocity.y = json["telemetry"]["datas"][i]["velocity"]["y"].asFloat();
+			tData.velocity.z = json["telemetry"]["datas"][i]["velocity"]["z"].asFloat();
+
+			tData.tireTemp.x = json["telemetry"]["datas"][i]["tireTemp"]["FL"].asFloat();
+			tData.tireTemp.y = json["telemetry"]["datas"][i]["tireTemp"]["FR"].asFloat();
+			tData.tireTemp.z = json["telemetry"]["datas"][i]["tireTemp"]["RL"].asFloat();
+			tData.tireTemp.w = json["telemetry"]["datas"][i]["tireTemp"]["RR"].asFloat();
+
+			tData.clutch = json["telemetry"]["datas"][i]["clutch"].asFloat();
+			tData.brake = json["telemetry"]["datas"][i]["brake"].asFloat();
+			tData.throttle = json["telemetry"]["datas"][i]["throttle"].asFloat();
+			tData.steerAngle = json["telemetry"]["datas"][i]["steerAngle"].asFloat();
+
+			telemetryBuffers.push_back(tData);
+		}
+
+		isFileLoaded = true;
+		lastPlayedTimer = ofGetElapsedTimeMillis();
+	}
+	else {
+		ofLog(OF_LOG_ERROR, "log load failed. check fileName");
+		isFileLoaded = false;
+	}
+}
+
+void Telemetry::playLog() {
+	if (isFileLoaded) {
+		if (ofGetElapsedTimeMillis() - lastPlayedTimer > 50) {
+
+			// car, track, player
+			//sendStringTelemetryMessage("/playerInfo/carName", carModel);
+			//sendStringTelemetryMessage("/playerInfo/trackName", track);
+			//sendStringTelemetryMessage("/playerInfo/playerName", playerName);
+
+			// car info
+			//sendFloatTelemetryMessage("/carInfo/maxTorque", acsStaticData->maxTorque);
+			//sendFloatTelemetryMessage("/carInfo/maxRPM", acsStaticData->maxRpm);
+			//sendIntTelemetryMessage("/carInfo/hasDRS", acsStaticData->hasDRS);
+			//sendIntTelemetryMessage("/carInfo/hasERS", acsStaticData->hasERS);
+
+			// lap info
+			//sendIntTelemetryMessage("/telemetry/completedLaps", telemetryBuffers[logPlayHead].completedLaps);
+			//sendStringTelemetryMessage("/telemetry/currentLapTime", wstring2string(acsGraphicsData->currentTime));
+			//sendStringTelemetryMessage("/telemetry/lastLapTime", wstring2string(acsGraphicsData->lastTime));
+			//sendStringTelemetryMessage("/telemetry/bestLapTime", wstring2string(acsGraphicsData->bestTime));
+			sendIntTelemetryMessage("/telemetry/currentLapTimeMillis", telemetryBuffers[logPlayHead].iCurrentTime);
+			//sendIntTelemetryMessage("/telemetry/lastLapTimeMillis", acsGraphicsData->iLastTime);
+			//sendIntTelemetryMessage("/telemetry/bestLapTimeMillis", acsGraphicsData->iBestTime);
+			sendFloatTelemetryMessage("/telemetry/normalizedCarPosition", telemetryBuffers[logPlayHead].normalizedCarPosition);
+
+			// car status
+			sendIntTelemetryMessage("/telemetry/gear", telemetryBuffers[logPlayHead].gear);
+			sendIntTelemetryMessage("/telemetry/rpms", telemetryBuffers[logPlayHead].rpm);
+			sendFloatTelemetryMessage("/telemetry/speedKmh", telemetryBuffers[logPlayHead].speedKmh);
+
+			sendFloatTelemetryMessage("/telemetry/heading", telemetryBuffers[logPlayHead].heading);
+			sendFloatTelemetryMessage("/telemetry/pitch", telemetryBuffers[logPlayHead].pitch);
+			sendFloatTelemetryMessage("/telemetry/roll", telemetryBuffers[logPlayHead].roll);
+
+			sendFloatTelemetryMessage("/telemetry/carCoordinates/x", telemetryBuffers[logPlayHead].carCoordinates.x);
+			sendFloatTelemetryMessage("/telemetry/carCoordinates/y", telemetryBuffers[logPlayHead].carCoordinates.y);
+			sendFloatTelemetryMessage("/telemetry/carCoordinates/z", telemetryBuffers[logPlayHead].carCoordinates.z);
+
+			// accG
+			sendFloatTelemetryMessage("/telemetry/accG/x", telemetryBuffers[logPlayHead].accG.x);
+			sendFloatTelemetryMessage("/telemetry/accG/y", telemetryBuffers[logPlayHead].accG.y);
+			sendFloatTelemetryMessage("/telemetry/accG/z", telemetryBuffers[logPlayHead].accG.z);
+
+			// velocity
+			sendFloatTelemetryMessage("/telemetry/velocity/x", telemetryBuffers[logPlayHead].velocity.x);
+			sendFloatTelemetryMessage("/telemetry/velocity/y", telemetryBuffers[logPlayHead].velocity.y);
+			sendFloatTelemetryMessage("/telemetry/velocity/z", telemetryBuffers[logPlayHead].velocity.z);
+
+			// tireTemp
+			sendFloatTelemetryMessage("/telemetry/tireTemp/fl", telemetryBuffers[logPlayHead].tireTemp.x);
+			sendFloatTelemetryMessage("/telemetry/tireTemp/fr", telemetryBuffers[logPlayHead].tireTemp.y);
+			sendFloatTelemetryMessage("/telemetry/tireTemp/rl", telemetryBuffers[logPlayHead].tireTemp.z);
+			sendFloatTelemetryMessage("/telemetry/tireTemp/rr", telemetryBuffers[logPlayHead].tireTemp.w);
+
+			// 
+			sendIntTelemetryMessage("/telemetry/drsAvailable", telemetryBuffers[logPlayHead].drsAvailable);
+			sendIntTelemetryMessage("/telemetry/drsEnabled", telemetryBuffers[logPlayHead].drsEnabled);
+
+			// controller information
+
+			sendFloatTelemetryMessage("/controller/clutch", telemetryBuffers[logPlayHead].clutch);
+			sendFloatTelemetryMessage("/controller/brake", telemetryBuffers[logPlayHead].brake);
+			sendFloatTelemetryMessage("/controller/throttle", telemetryBuffers[logPlayHead].throttle);
+			sendFloatTelemetryMessage("/controller/steerAngle", telemetryBuffers[logPlayHead].steerAngle);
+			//telemetryBuffers[logPlayHead].
+
+			logPlayHead++;
+			if (logPlayHead == telemetryBuffers.size())	logPlayHead = 0;
+			lastPlayedTimer = ofGetElapsedTimeMillis();
+		}
+	}
+	else {
+		ofLog(OF_LOG_ERROR, "log play failed");
+	}
+
+}
+
+void Telemetry::sendIntTelemetryMessage(string addressEndpoint, int value) {
+	ofxOscMessage m;
+	m.setAddress(addressEndpoint);
+	m.addInt32Arg(value);
+	sender.sendMessage(m);
+}
+
+void Telemetry::sendFloatTelemetryMessage(string addressEndpoint, float value) {
+	ofxOscMessage m;
+	m.setAddress(addressEndpoint);
+	m.addFloatArg(value);
+	sender.sendMessage(m);
+}
+
+void Telemetry::sendStringTelemetryMessage(string addressEndpoint, string value) {
+	ofxOscMessage m;
+	m.setAddress(addressEndpoint);
+	m.addStringArg(value);
+	sender.sendMessage(m);
+}
+
+void Telemetry::sendBoolTelemetryMessage(string addressEndpoint, bool value) {
+	ofxOscMessage m;
+	m.setAddress(addressEndpoint);
+	m.addBoolArg(value);
+	sender.sendMessage(m);
 }

@@ -73,4 +73,6 @@ public:
 	Telemetry telemetry;
 	ofPolyline carPos;
 
+	bool bPlayLogOn = false;
+
 };

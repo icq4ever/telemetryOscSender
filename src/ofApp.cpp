@@ -35,15 +35,17 @@ void ofApp::update(){
 	if (isAcsStaticConnected)	acsStaticData = acsFileStatic.getData();
 
 	if (ofGetElapsedTimeMillis() - lastOscSentTimer > 50) {
-		sendOscMessage();
+		if(!bPlayLogOn)	sendOscMessage();
 
 		if (bRecordOn) {
 
+			tData.iCurrentTime = acsGraphicsData->iCurrentTime;
 			tData.gear = acsPhysicsData->gear;
 			tData.rpm = acsPhysicsData->rpms;
 			tData.speedKmh = acsPhysicsData->speedKmh;
 			tData.drsAvailable = acsPhysicsData->drsAvailable;
 			tData.drsEnabled = acsPhysicsData->drsEnabled;
+			tData.normalizedCarPosition = acsGraphicsData->normalizedCarPosition;
 			//acsPhysicsData->drsAvailable == 1 ? tData.drsAvailable = true : tData.drsAvailable = false;
 			//acsPhysicsData->drsEnabled == 1 ? tData.drsEnabled = true : tData.drsEnabled = false;
 
@@ -92,6 +94,7 @@ void ofApp::update(){
 	}
 
 	
+	if (bPlayLogOn)	telemetry.playLog();
 
 }
 
@@ -340,9 +343,9 @@ void ofApp::sendOscMessage(){
 	sendFloatTelemetryMessage("/telemetry/pitch", acsPhysicsData->pitch);
 	sendFloatTelemetryMessage("/telemetry/roll", acsPhysicsData->roll);
 
-	sendFloatTelemetryMessage("telemetry/carCoordinates/x", acsGraphicsData->carCoordinates[0]);
-	sendFloatTelemetryMessage("telemetry/carCoordinates/y", acsGraphicsData->carCoordinates[2]);
-	sendFloatTelemetryMessage("telemetry/carCoordinates/z", acsGraphicsData->carCoordinates[1]);
+	sendFloatTelemetryMessage("/telemetry/carCoordinates/x", acsGraphicsData->carCoordinates[0]);
+	sendFloatTelemetryMessage("/telemetry/carCoordinates/y", acsGraphicsData->carCoordinates[2]);
+	sendFloatTelemetryMessage("/telemetry/carCoordinates/z", acsGraphicsData->carCoordinates[1]);
 	
 	// accG
 	sendFloatTelemetryMessage("/telemetry/accG/x", acsPhysicsData->accG[0]);
@@ -377,6 +380,15 @@ void ofApp::sendOscMessage(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){ 
 	switch (key) {
+		case 'l':
+		case 'L':
+			telemetry.importJson("log");
+			break;
+
+		case 'p':
+		case 'P':
+			bPlayLogOn = !bPlayLogOn;
+			break;
 		case 'r':
 		case 'R':
 			bRecordOn = true;
