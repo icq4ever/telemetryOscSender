@@ -20,19 +20,29 @@ void Telemetry::export2Json() {
 
 	ofxJSONElement json;
 
-	json["telemetry"]["laps"] = completedLaps+1;
-	//json["telemetry"]["laps"]["lastLapTimeMillis"] = lastLapTimeMillis;
-	//json["telemetry"]["laps"]["bestLapTimeMillis"] = bestLapTimeMillis;
+	json["staticData"]["playerName"] = tStaticData.playerName;
+	json["staticData"]["carInfo"] = tStaticData.carInfo;
+	json["staticData"]["trackName"] = tStaticData.trackInfo;
+
+	json["staticData"]["maxTorque"] = tStaticData.maxTorque;
+	json["staticData"]["maxRPM"] = tStaticData.maxRpm;
+	json["staticData"]["hasDRS"] = tStaticData.hasDRS;
+	json["staticData"]["hasERS"] = tStaticData.hasERS;
+
 
 	for (int i = 0; i < telemetryBuffers.size(); i++) {
-		json["telemetry"]["datas"][i]["frameNo"] = i + 1;
-		json["telemetry"]["datas"][i]["gear"] = telemetryBuffers[i].gear;
-		json["telemetry"]["datas"][i]["rpm"] = telemetryBuffers[i].rpm;
-		json["telemetry"]["datas"][i]["speedKmh"] = telemetryBuffers[i].speedKmh;
-		json["telemetry"]["datas"][i]["drsAvailable"] = telemetryBuffers[i].drsAvailable;
-		json["telemetry"]["datas"][i]["drsEnabled"] = telemetryBuffers[i].drsEnabled;
-		json["telemetry"]["datas"][i]["normalizedCarPosition"] = telemetryBuffers[i].normalizedCarPosition;
-		json["telemetry"]["datas"][i]["iCurrentTime"] = telemetryBuffers[i].iCurrentTime;
+		json["telemetry"][i]["lastLapTimeMillis"] = tStaticData.lastLapTimeMillis;
+		json["telemetry"][i]["bestLapTimeMillis"] = tStaticData.bestLapTimeMillis;
+		json["telemetry"][i]["laps"] = telemetryBuffers[i].completedLaps + 1;
+		json["telemetry"][i]["iCurrentTime"] = telemetryBuffers[i].iCurrentTime;
+		json["telemetry"][i]["frameNo"] = i + 1;
+		json["telemetry"][i]["gear"] = telemetryBuffers[i].gear;
+		json["telemetry"][i]["rpm"] = telemetryBuffers[i].rpm;
+		json["telemetry"][i]["speedKmh"] = telemetryBuffers[i].speedKmh;
+		json["telemetry"][i]["drsAvailable"] = telemetryBuffers[i].drsAvailable;
+		json["telemetry"][i]["drsEnabled"] = telemetryBuffers[i].drsEnabled;
+		json["telemetry"][i]["normalizedCarPosition"] = telemetryBuffers[i].normalizedCarPosition;
+		
 		/*
 		float heading;	// heading of the car on world coord
 		float pitch;	// pitch of the car on world coord
@@ -40,32 +50,32 @@ void Telemetry::export2Json() {
 		ofVec3f carCoordinates;		// car position on world coord(x,y,z)								
 		*/
 
-		json["telemetry"]["datas"][i]["heading"] = telemetryBuffers[i].heading;
-		json["telemetry"]["datas"][i]["pitch"] = telemetryBuffers[i].pitch;
-		json["telemetry"]["datas"][i]["roll"] = telemetryBuffers[i].roll;
+		json["telemetry"][i]["heading"] = telemetryBuffers[i].heading;
+		json["telemetry"][i]["pitch"] = telemetryBuffers[i].pitch;
+		json["telemetry"][i]["roll"] = telemetryBuffers[i].roll;
 
-		json["telemetry"]["datas"][i]["carCoordinates"]["x"] = telemetryBuffers[i].carCoordinates.x;
-		json["telemetry"]["datas"][i]["carCoordinates"]["y"] = telemetryBuffers[i].carCoordinates.y;
-		json["telemetry"]["datas"][i]["carCoordinates"]["z"] = telemetryBuffers[i].carCoordinates.z;
+		json["telemetry"][i]["carCoordinates"]["x"] = telemetryBuffers[i].carCoordinates.x;
+		json["telemetry"][i]["carCoordinates"]["y"] = telemetryBuffers[i].carCoordinates.y;
+		json["telemetry"][i]["carCoordinates"]["z"] = telemetryBuffers[i].carCoordinates.z;
 
 
-		json["telemetry"]["datas"][i]["accG"]["x"] = telemetryBuffers[i].accG.x;
-		json["telemetry"]["datas"][i]["accG"]["y"] = telemetryBuffers[i].accG.y;
-		json["telemetry"]["datas"][i]["accG"]["z"] = telemetryBuffers[i].accG.z;
-													 
-		json["telemetry"]["datas"][i]["velocity"]["x"] = telemetryBuffers[i].velocity.x;
-		json["telemetry"]["datas"][i]["velocity"]["y"] = telemetryBuffers[i].velocity.y;
-		json["telemetry"]["datas"][i]["velocity"]["z"] = telemetryBuffers[i].velocity.z;
-													 
-		json["telemetry"]["datas"][i]["tireTemp"]["FL"] = telemetryBuffers[i].tireTemp.x;
-		json["telemetry"]["datas"][i]["tireTemp"]["FR"] = telemetryBuffers[i].tireTemp.y;
-		json["telemetry"]["datas"][i]["tireTemp"]["RL"] = telemetryBuffers[i].tireTemp.z;
-		json["telemetry"]["datas"][i]["tireTemp"]["RR"] = telemetryBuffers[i].tireTemp.w;
-													 
-		json["telemetry"]["datas"][i]["clutch"] = telemetryBuffers[i].clutch;
-		json["telemetry"]["datas"][i]["brake"] = telemetryBuffers[i].brake;
-		json["telemetry"]["datas"][i]["throttle"] = telemetryBuffers[i].throttle;
-		json["telemetry"]["datas"][i]["steerAngle"] = telemetryBuffers[i].steerAngle;
+		json["telemetry"][i]["accG"]["x"] = telemetryBuffers[i].accG.x;
+		json["telemetry"][i]["accG"]["y"] = telemetryBuffers[i].accG.y;
+		json["telemetry"][i]["accG"]["z"] = telemetryBuffers[i].accG.z;
+										 
+		json["telemetry"][i]["velocity"]["x"] = telemetryBuffers[i].velocity.x;
+		json["telemetry"][i]["velocity"]["y"] = telemetryBuffers[i].velocity.y;
+		json["telemetry"][i]["velocity"]["z"] = telemetryBuffers[i].velocity.z;
+										 
+		json["telemetry"][i]["tireTemp"]["FL"] = telemetryBuffers[i].tireTemp.x;
+		json["telemetry"][i]["tireTemp"]["FR"] = telemetryBuffers[i].tireTemp.y;
+		json["telemetry"][i]["tireTemp"]["RL"] = telemetryBuffers[i].tireTemp.z;
+		json["telemetry"][i]["tireTemp"]["RR"] = telemetryBuffers[i].tireTemp.w;
+										 
+		json["telemetry"][i]["clutch"] = telemetryBuffers[i].clutch;
+		json["telemetry"][i]["brake"] = telemetryBuffers[i].brake;
+		json["telemetry"][i]["throttle"] = telemetryBuffers[i].throttle;
+		json["telemetry"][i]["steerAngle"] = telemetryBuffers[i].steerAngle;
 	}
 
 	if (!json.save(file, true)) {
@@ -83,44 +93,53 @@ void Telemetry::importJson(string fileName) {
 
 	if (loadSuccessful) {
 		cout << "file loading!!! " << endl;
-		completedLaps = json["telemetry"]["laps"].asInt() - 1;
+
+		tStaticData.playerName = json["staticData"]["playerName"].asString();
+		tStaticData.carInfo = json["staticData"]["carInfo"].asString();
+		tStaticData.trackInfo = json["staticData"]["trackName"].asString();
+
+		tStaticData.maxTorque = json["staticData"]["maxTorque"].asFloat();
+		tStaticData.maxRpm = json["staticData"]["maxRPM"].asFloat();
+		tStaticData.hasDRS = json["staticData"]["hasDRS"].asInt();
+		tStaticData.hasERS = json["staticData"]["hasERS"].asInt();
 
 
-		for (unsigned int i = 0; i < json["telemetry"]["datas"].size(); i++) {
+		for (unsigned int i = 0; i < json["telemetry"].size(); i++) {
 			telemetryData tData;
-			tData.iCurrentTime = json["telemetry"]["datas"][i]["iCurrentTime"].asInt();
-			tData.gear = json["telemetry"]["datas"][i]["gear"].asInt();
-			tData.rpm = json["telemetry"]["datas"][i]["rpm"].asInt();
-			tData.speedKmh = json["telemetry"]["datas"][i]["speedKmh"].asInt();
-			tData.drsAvailable = json["telemetry"]["datas"][i]["drsAvailable"].asInt();
-			tData.drsEnabled = json["telemetry"]["datas"][i]["drsEnabled"].asInt();
-			tData.normalizedCarPosition = json["telemetry"]["datas"][i]["normalizedCarPosition"].asFloat();
+			tData.completedLaps = json["telemetry"][i]["laps"].asInt();
+			tData.iCurrentTime = json["telemetry"][i]["iCurrentTime"].asInt();
+			tData.gear = json["telemetry"][i]["gear"].asInt();
+			tData.rpm = json["telemetry"][i]["rpm"].asInt();
+			tData.speedKmh = json["telemetry"][i]["speedKmh"].asInt();
+			tData.drsAvailable = json["telemetry"][i]["drsAvailable"].asInt();
+			tData.drsEnabled = json["telemetry"][i]["drsEnabled"].asInt();
+			tData.normalizedCarPosition = json["telemetry"][i]["normalizedCarPosition"].asFloat();
 
-			tData.heading = json["telemetry"]["datas"][i]["heading"].asFloat();
-			tData.pitch = json["telemetry"]["datas"][i]["pitch"].asFloat();
-			tData.roll = json["telemetry"]["datas"][i]["roll"].asFloat();
+			tData.heading = json["telemetry"][i]["heading"].asFloat();
+			tData.pitch = json["telemetry"][i]["pitch"].asFloat();
+			tData.roll = json["telemetry"][i]["roll"].asFloat();
 
-			tData.carCoordinates.x = json["telemetry"]["datas"][i]["carCoordinates"]["x"].asFloat();
-			tData.carCoordinates.y = json["telemetry"]["datas"][i]["carCoordinates"]["y"].asFloat();
-			tData.carCoordinates.z = json["telemetry"]["datas"][i]["carCoordinates"]["z"].asFloat();
+			tData.carCoordinates.x = json["telemetry"][i]["carCoordinates"]["x"].asFloat();
+			tData.carCoordinates.y = json["telemetry"][i]["carCoordinates"]["y"].asFloat();
+			tData.carCoordinates.z = json["telemetry"][i]["carCoordinates"]["z"].asFloat();
 
-			tData.accG.x = json["telemetry"]["datas"][i]["accG"]["x"].asFloat();
-			tData.accG.y = json["telemetry"]["datas"][i]["accG"]["y"].asFloat();
-			tData.accG.z = json["telemetry"]["datas"][i]["accG"]["z"].asFloat();
+			tData.accG.x = json["telemetry"][i]["accG"]["x"].asFloat();
+			tData.accG.y = json["telemetry"][i]["accG"]["y"].asFloat();
+			tData.accG.z = json["telemetry"][i]["accG"]["z"].asFloat();
 
-			tData.velocity.x = json["telemetry"]["datas"][i]["velocity"]["x"].asFloat();
-			tData.velocity.y = json["telemetry"]["datas"][i]["velocity"]["y"].asFloat();
-			tData.velocity.z = json["telemetry"]["datas"][i]["velocity"]["z"].asFloat();
+			tData.velocity.x = json["telemetry"][i]["velocity"]["x"].asFloat();
+			tData.velocity.y = json["telemetry"][i]["velocity"]["y"].asFloat();
+			tData.velocity.z = json["telemetry"][i]["velocity"]["z"].asFloat();
 
-			tData.tireTemp.x = json["telemetry"]["datas"][i]["tireTemp"]["FL"].asFloat();
-			tData.tireTemp.y = json["telemetry"]["datas"][i]["tireTemp"]["FR"].asFloat();
-			tData.tireTemp.z = json["telemetry"]["datas"][i]["tireTemp"]["RL"].asFloat();
-			tData.tireTemp.w = json["telemetry"]["datas"][i]["tireTemp"]["RR"].asFloat();
+			tData.tireTemp.x = json["telemetry"][i]["tireTemp"]["FL"].asFloat();
+			tData.tireTemp.y = json["telemetry"][i]["tireTemp"]["FR"].asFloat();
+			tData.tireTemp.z = json["telemetry"][i]["tireTemp"]["RL"].asFloat();
+			tData.tireTemp.w = json["telemetry"][i]["tireTemp"]["RR"].asFloat();
 
-			tData.clutch = json["telemetry"]["datas"][i]["clutch"].asFloat();
-			tData.brake = json["telemetry"]["datas"][i]["brake"].asFloat();
-			tData.throttle = json["telemetry"]["datas"][i]["throttle"].asFloat();
-			tData.steerAngle = json["telemetry"]["datas"][i]["steerAngle"].asFloat();
+			tData.clutch = json["telemetry"][i]["clutch"].asFloat();
+			tData.brake = json["telemetry"][i]["brake"].asFloat();
+			tData.throttle = json["telemetry"][i]["throttle"].asFloat();
+			tData.steerAngle = json["telemetry"][i]["steerAngle"].asFloat();
 
 			telemetryBuffers.push_back(tData);
 		}
@@ -151,8 +170,7 @@ void Telemetry::playLog() {
 			sendIntTelemetryMessage("/carInfo/hasDRS", tStaticData.hasDRS);
 			sendIntTelemetryMessage("/carInfo/hasERS", tStaticData.hasERS);
 
-			// lap info
-			sendIntTelemetryMessage("/telemetry/completedLaps", tStaticData.completedLaps);
+			// laptime info
 			sendIntTelemetryMessage("/telemetry/lastLapTimeMillis", tStaticData.lastLapTimeMillis);
 			sendIntTelemetryMessage("/telemetry/bestLapTimeMillis", tStaticData.bestLapTimeMillis);
 
@@ -161,6 +179,7 @@ void Telemetry::playLog() {
 			sendFloatTelemetryMessage("/telemetry/normalizedCarPosition", telemetryBuffers[logPlayHead].normalizedCarPosition);
 
 			// car status
+			sendIntTelemetryMessage("/telemetry/completedLaps", telemetryBuffers[logPlayHead].completedLaps);
 			sendIntTelemetryMessage("/telemetry/gear", telemetryBuffers[logPlayHead].gear);
 			sendIntTelemetryMessage("/telemetry/rpms", telemetryBuffers[logPlayHead].rpm);
 			sendFloatTelemetryMessage("/telemetry/speedKmh", telemetryBuffers[logPlayHead].speedKmh);

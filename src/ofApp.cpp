@@ -39,7 +39,9 @@ void ofApp::update(){
 		if(!bPlayLogOn)	sendOscMessage();
 
 		if (bRecordOn) {
-			
+			updateStaticData();
+
+			tData.completedLaps = acsGraphicsData->completedLaps + 1;
 			tData.iCurrentTime = acsGraphicsData->iCurrentTime;
 			tData.gear = acsPhysicsData->gear;
 			tData.rpm = acsPhysicsData->rpms;
@@ -326,7 +328,7 @@ void ofApp::sendOscMessage(){
 	sendIntTelemetryMessage("/carInfo/hasERS", acsStaticData->hasERS);
 
 	// lap info
-	sendIntTelemetryMessage("/telemetry/completedLaps", acsGraphicsData->completedLaps);
+	sendIntTelemetryMessage("/telemetry/completedLaps", acsGraphicsData->completedLaps+1);
 	sendStringTelemetryMessage("/telemetry/currentLapTime", wstring2string(acsGraphicsData->currentTime));
 	sendStringTelemetryMessage("/telemetry/lastLapTime", wstring2string(acsGraphicsData->lastTime));
 	sendStringTelemetryMessage("/telemetry/bestLapTime", wstring2string(acsGraphicsData->bestTime));
@@ -478,7 +480,4 @@ void ofApp::updateStaticData(){
 
 	telemetry.tStaticData.lastLapTimeMillis = acsGraphicsData->iLastTime;
 	telemetry.tStaticData.bestLapTimeMillis = acsGraphicsData->iBestTime;
-	telemetry.tStaticData.completedLaps = acsGraphicsData->completedLaps;
-//	telemetry.tStaticData.playerName = acsStaticData->playerName;
-//	telemetry.tStaticData.carINfo = acsStaticData->
 }

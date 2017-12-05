@@ -1,7 +1,7 @@
 #pragma once
 
-//#define HOST "192.168.100.255"
-#define HOST "localhost"
+#define HOST "192.16/8.100.255"
+//#define HOST "localhost"
 #define PORT 9000
 
 #include "ofMain.h"

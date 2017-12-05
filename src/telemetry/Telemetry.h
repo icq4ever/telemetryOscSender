@@ -9,6 +9,7 @@
 
 
 struct telemetryData{	
+	int completedLaps;
 	int gear;
 	int rpm;
 	int speedKmh;
@@ -28,6 +29,7 @@ struct telemetryData{
 	float brake;
 	float clutch;
 	float steerAngle;
+
 	int iCurrentTime;
 };
 
@@ -44,7 +46,6 @@ struct TstaticData {
 	
 	int lastLapTimeMillis;
 	int bestLapTimeMillis;
-	int completedLaps;
 };
 
 class Telemetry {
