@@ -3,6 +3,7 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetFrameRate(60);
+	ofSetVerticalSync(true);
 
 	acsPhysicsData  = new SPageFilePhysics();
 	acsGraphicsData = new SPageFileGraphic();
@@ -38,7 +39,7 @@ void ofApp::update(){
 		if(!bPlayLogOn)	sendOscMessage();
 
 		if (bRecordOn) {
-
+			
 			tData.iCurrentTime = acsGraphicsData->iCurrentTime;
 			tData.gear = acsPhysicsData->gear;
 			tData.rpm = acsPhysicsData->rpms;
@@ -463,4 +464,9 @@ void ofApp::sendBoolTelemetryMessage(string addressEndpoint, bool value) {
 	m.setAddress(addressEndpoint);
 	m.addBoolArg(value);
 	sender.sendMessage(m);
+}
+
+void ofApp::updateStaticData(){
+//	telemetry.tStaticData.playerName = acsStaticData->playerName;
+//	telemetry.tStaticData.carINfo = acsStaticData->
 }

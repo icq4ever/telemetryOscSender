@@ -3,11 +3,12 @@
 #include "ofxJSON.h"
 #include "ofxOsc.h"
 
-#define HOST "192.168.100.255"
+//#define HOST "192.168.100.255"
+#define HOST "localhost"
 #define PORT 9000
 
 
-struct telemetryData{
+struct telemetryData{	
 	int gear;
 	int rpm;
 	int speedKmh;
@@ -30,22 +31,27 @@ struct telemetryData{
 	int iCurrentTime;
 };
 
+struct TstaticData {
+	string carInfo;
+	string trackInfo;
+	string playerName;
+	
+	// car info
+	float maxTorque;
+	float maxRpm;
+	int hasDRS;
+	int hasERS;
+	
+	int lastLapTimeMillis;
+	int bestLapTimeMillis;
+	int completedLaps;
+};
+
 class Telemetry {
 
 public:
 	Telemetry();
 	~Telemetry();
-
-	int completedLaps;
-	string lastTime;
-	string bestTime;
-	float lastLapTimeMillis;
-	float bestLapTimeMillis;
-
-	float maxTorque;
-	int maxRpm;
-	int hasDRS;
-	int hasERS;
 
 	// telemetry Buffer
 	vector<telemetryData> telemetryBuffers;
@@ -59,7 +65,7 @@ public:
 	void playLog();
 	uint64_t lastPlayedTimer;
 	unsigned int logPlayHead;
-
+	TStaticData tStaticData;
 
 	void sendIntTelemetryMessage(string addressEndpoint, int value);
 	void sendFloatTelemetryMessage(string addressEndpoint, float value);

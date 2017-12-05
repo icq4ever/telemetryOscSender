@@ -1,15 +1,16 @@
 #pragma once
 
-#define HOST "192.168.100.255"
+//#define HOST "192.168.100.255"
+#define HOST "localhost"
 #define PORT 9000
 
 #include "ofMain.h"
 #include "ofxSharedMemory.h"
 #include "ofxOSC.h"
 #include "assettoCorsa.h"
-#include "r3e.h"
-#include "utils.h"
-#include <atlconv.h>
+//#include "r3e.h"
+//#include "utils.h"
+//#include <atlconv.h>
 #include "telemetry.h"
 
 class ofApp : public ofBaseApp{
@@ -72,6 +73,8 @@ public:
 	telemetryData tData;
 	Telemetry telemetry;
 	ofPolyline carPos;
+	
+	void updateStaticData();
 
 	bool bPlayLogOn = false;
 

@@ -3,7 +3,7 @@
 
 
 Telemetry::Telemetry() {
-	sender.setup(HOST, PORT);
+	sender.setup("127.0.0.1", PORT);
 }
 
 
@@ -82,6 +82,7 @@ void Telemetry::importJson(string fileName) {
 	loadSuccessful = json.open("telemetryLogs/" + fileName + ".json");
 
 	if (loadSuccessful) {
+		cout << "file loading!!! " << endl;
 		completedLaps = json["telemetry"]["laps"].asInt() - 1;
 
 
@@ -135,18 +136,19 @@ void Telemetry::importJson(string fileName) {
 
 void Telemetry::playLog() {
 	if (isFileLoaded) {
+//		cout << "play!!!" << endl;
 		if (ofGetElapsedTimeMillis() - lastPlayedTimer > 50) {
 
 			// car, track, player
-			//sendStringTelemetryMessage("/playerInfo/carName", carModel);
-			//sendStringTelemetryMessage("/playerInfo/trackName", track);
-			//sendStringTelemetryMessage("/playerInfo/playerName", playerName);
-
-			// car info
-			//sendFloatTelemetryMessage("/carInfo/maxTorque", acsStaticData->maxTorque);
-			//sendFloatTelemetryMessage("/carInfo/maxRPM", acsStaticData->maxRpm);
-			//sendIntTelemetryMessage("/carInfo/hasDRS", acsStaticData->hasDRS);
-			//sendIntTelemetryMessage("/carInfo/hasERS", acsStaticData->hasERS);
+//			sendStringTelemetryMessage("/playerInfo/carName", carModel);
+//			sendStringTelemetryMessage("/playerInfo/trackName", track);
+//			sendStringTelemetryMessage("/playerInfo/playerName", playerName);
+//
+//			// car info
+//			sendFloatTelemetryMessage("/carInfo/maxTorque", acsStaticData->maxTorque);
+//			sendFloatTelemetryMessage("/carInfo/maxRPM", acsStaticData->maxRpm);
+//			sendIntTelemetryMessage("/carInfo/hasDRS", acsStaticData->hasDRS);
+//			sendIntTelemetryMessage("/carInfo/hasERS", acsStaticData->hasERS);
 
 			// lap info
 			//sendIntTelemetryMessage("/telemetry/completedLaps", telemetryBuffers[logPlayHead].completedLaps);
