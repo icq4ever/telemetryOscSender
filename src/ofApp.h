@@ -62,7 +62,8 @@ public:
 
 	void sendIntTelemetryMessage(string addressEndpoint, int value);
 	void sendFloatTelemetryMessage(string addressEndpoint, float value);
-
+	void sendVec3fTelemetryMessage(string addressEndpoint, float x, float y, float z);
+	void sendVec4fTelemetryMessage(string addressEndpoint, float x, float y, float z, float w);
 	void sendStringTelemetryMessage(string addressEndpoint, string value);
 	void sendBoolTelemetryMessage(string addressEndpoint, bool value);
 

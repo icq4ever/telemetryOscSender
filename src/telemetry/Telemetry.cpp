@@ -197,7 +197,7 @@ void Telemetry::playLog() {
 			//sendFloatTelemetryMessage("/telemetry/accG/x", telemetryBuffers[logPlayHead].accG.x);
 			//sendFloatTelemetryMessage("/telemetry/accG/y", telemetryBuffers[logPlayHead].accG.y);
 			//sendFloatTelemetryMessage("/telemetry/accG/z", telemetryBuffers[logPlayHead].accG.z);
-			sendVec3fTelemetryMessage("/telemetry/", telemetryBuffers[logPlayHead].accG.x, telemetryBuffers[logPlayHead].accG.y, telemetryBuffers[logPlayHead].accG.z);
+			sendVec3fTelemetryMessage("/telemetry/accG", telemetryBuffers[logPlayHead].accG.x, telemetryBuffers[logPlayHead].accG.y, telemetryBuffers[logPlayHead].accG.z);
 			
 			// velocity
 			//sendFloatTelemetryMessage("/telemetry/velocity/x", telemetryBuffers[logPlayHead].velocity.x);
@@ -249,7 +249,7 @@ void Telemetry::sendFloatTelemetryMessage(string addressEndpoint, float value) {
 	sender.sendMessage(m);
 }
 
-void ofApp::sendVec3fTelemetryMessage(string addressEndpoint, float x, float y, float z) {
+void Telemetry::sendVec3fTelemetryMessage(string addressEndpoint, float x, float y, float z) {
 	ofxOscMessage m;
 	m.setAddress(addressEndpoint);
 	m.addFloatArg(x);
@@ -258,7 +258,7 @@ void ofApp::sendVec3fTelemetryMessage(string addressEndpoint, float x, float y, 
 	sender.sendMessage(m);
 }
 
-void ofApp::sendVec4fTelemetryMessage(string addressEndpoint, float x, float y, float z, float w) {
+void Telemetry::sendVec4fTelemetryMessage(string addressEndpoint, float x, float y, float z, float w) {
 	ofxOscMessage m;
 	m.setAddress(addressEndpoint);
 	m.addFloatArg(x);
