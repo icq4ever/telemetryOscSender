@@ -188,26 +188,30 @@ void Telemetry::playLog() {
 			sendFloatTelemetryMessage("/telemetry/pitch", telemetryBuffers[logPlayHead].pitch);
 			sendFloatTelemetryMessage("/telemetry/roll", telemetryBuffers[logPlayHead].roll);
 
-			sendFloatTelemetryMessage("/telemetry/carCoordinates/x", telemetryBuffers[logPlayHead].carCoordinates.x);
-			sendFloatTelemetryMessage("/telemetry/carCoordinates/y", telemetryBuffers[logPlayHead].carCoordinates.y);
-			sendFloatTelemetryMessage("/telemetry/carCoordinates/z", telemetryBuffers[logPlayHead].carCoordinates.z);
-
+			//sendFloatTelemetryMessage("/telemetry/carCoordinates/x", telemetryBuffers[logPlayHead].carCoordinates.x);
+			//sendFloatTelemetryMessage("/telemetry/carCoordinates/y", telemetryBuffers[logPlayHead].carCoordinates.y);
+			//sendFloatTelemetryMessage("/telemetry/carCoordinates/z", telemetryBuffers[logPlayHead].carCoordinates.z);
+			sendVec3fTelemetryMessage("/telemetry/carCoordinates", telemetryBuffers[logPlayHead].carCoordinates.x, telemetryBuffers[logPlayHead].carCoordinates.y, telemetryBuffers[logPlayHead].carCoordinates.z);
+			
 			// accG
-			sendFloatTelemetryMessage("/telemetry/accG/x", telemetryBuffers[logPlayHead].accG.x);
-			sendFloatTelemetryMessage("/telemetry/accG/y", telemetryBuffers[logPlayHead].accG.y);
-			sendFloatTelemetryMessage("/telemetry/accG/z", telemetryBuffers[logPlayHead].accG.z);
-
+			//sendFloatTelemetryMessage("/telemetry/accG/x", telemetryBuffers[logPlayHead].accG.x);
+			//sendFloatTelemetryMessage("/telemetry/accG/y", telemetryBuffers[logPlayHead].accG.y);
+			//sendFloatTelemetryMessage("/telemetry/accG/z", telemetryBuffers[logPlayHead].accG.z);
+			sendVec3fTelemetryMessage("/telemetry/", telemetryBuffers[logPlayHead].accG.x, telemetryBuffers[logPlayHead].accG.y, telemetryBuffers[logPlayHead].accG.z);
+			
 			// velocity
-			sendFloatTelemetryMessage("/telemetry/velocity/x", telemetryBuffers[logPlayHead].velocity.x);
-			sendFloatTelemetryMessage("/telemetry/velocity/y", telemetryBuffers[logPlayHead].velocity.y);
-			sendFloatTelemetryMessage("/telemetry/velocity/z", telemetryBuffers[logPlayHead].velocity.z);
+			//sendFloatTelemetryMessage("/telemetry/velocity/x", telemetryBuffers[logPlayHead].velocity.x);
+			//sendFloatTelemetryMessage("/telemetry/velocity/y", telemetryBuffers[logPlayHead].velocity.y);
+			//sendFloatTelemetryMessage("/telemetry/velocity/z", telemetryBuffers[logPlayHead].velocity.z);
+			sendVec3fTelemetryMessage("/telemetry/velocity", telemetryBuffers[logPlayHead].velocity.x, telemetryBuffers[logPlayHead].velocity.y, telemetryBuffers[logPlayHead].velocity.z);
 
 			// tireTemp
-			sendFloatTelemetryMessage("/telemetry/tireTemp/fl", telemetryBuffers[logPlayHead].tireTemp.x);
-			sendFloatTelemetryMessage("/telemetry/tireTemp/fr", telemetryBuffers[logPlayHead].tireTemp.y);
-			sendFloatTelemetryMessage("/telemetry/tireTemp/rl", telemetryBuffers[logPlayHead].tireTemp.z);
-			sendFloatTelemetryMessage("/telemetry/tireTemp/rr", telemetryBuffers[logPlayHead].tireTemp.w);
-
+			//sendFloatTelemetryMessage("/telemetry/tireTemp/fl", telemetryBuffers[logPlayHead].tireTemp.x);
+			//sendFloatTelemetryMessage("/telemetry/tireTemp/fr", telemetryBuffers[logPlayHead].tireTemp.y);
+			//sendFloatTelemetryMessage("/telemetry/tireTemp/rl", telemetryBuffers[logPlayHead].tireTemp.z);
+			//sendFloatTelemetryMessage("/telemetry/tireTemp/rr", telemetryBuffers[logPlayHead].tireTemp.w);
+			sendVec4fTelemetryMessage("/telemetry/tireTemp", telemetryBuffers[logPlayHead].tireTemp.x, telemetryBuffers[logPlayHead].tireTemp.y, telemetryBuffers[logPlayHead].tireTemp.z, telemetryBuffers[logPlayHead].tireTemp.w);
+			
 			// 
 			sendIntTelemetryMessage("/telemetry/drsAvailable", telemetryBuffers[logPlayHead].drsAvailable);
 			sendIntTelemetryMessage("/telemetry/drsEnabled", telemetryBuffers[logPlayHead].drsEnabled);
@@ -242,6 +246,25 @@ void Telemetry::sendFloatTelemetryMessage(string addressEndpoint, float value) {
 	ofxOscMessage m;
 	m.setAddress(addressEndpoint);
 	m.addFloatArg(value);
+	sender.sendMessage(m);
+}
+
+void ofApp::sendVec3fTelemetryMessage(string addressEndpoint, float x, float y, float z) {
+	ofxOscMessage m;
+	m.setAddress(addressEndpoint);
+	m.addFloatArg(x);
+	m.addFloatArg(y);
+	m.addFloatArg(z);
+	sender.sendMessage(m);
+}
+
+void ofApp::sendVec4fTelemetryMessage(string addressEndpoint, float x, float y, float z, float w) {
+	ofxOscMessage m;
+	m.setAddress(addressEndpoint);
+	m.addFloatArg(x);
+	m.addFloatArg(y);
+	m.addFloatArg(z);
+	m.addFloatArg(w);
 	sender.sendMessage(m);
 }
 

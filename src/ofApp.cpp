@@ -346,32 +346,35 @@ void ofApp::sendOscMessage(){
 	sendFloatTelemetryMessage("/telemetry/pitch", acsPhysicsData->pitch);
 	sendFloatTelemetryMessage("/telemetry/roll", acsPhysicsData->roll);
 
-	sendFloatTelemetryMessage("/telemetry/carCoordinates/x", acsGraphicsData->carCoordinates[0]);
-	sendFloatTelemetryMessage("/telemetry/carCoordinates/y", acsGraphicsData->carCoordinates[2]);
-	sendFloatTelemetryMessage("/telemetry/carCoordinates/z", acsGraphicsData->carCoordinates[1]);
-	
+	//sendFloatTelemetryMessage("/telemetry/carCoordinates/x", acsGraphicsData->carCoordinates[0]);
+	//sendFloatTelemetryMessage("/telemetry/carCoordinates/y", acsGraphicsData->carCoordinates[2]);
+	//sendFloatTelemetryMessage("/telemetry/carCoordinates/z", acsGraphicsData->carCoordinates[1]);
+	sendVec3fTelemetryMessage("/telemetry/carCoordinates", acsGraphicsData->carCoordinates[0], acsGraphicsData->carCoordinates[2], acsGraphicsData->carCoordinates[1]);
+
 	// accG
-	sendFloatTelemetryMessage("/telemetry/accG/x", acsPhysicsData->accG[0]);
-	sendFloatTelemetryMessage("/telemetry/accG/y", acsPhysicsData->accG[1]);
-	sendFloatTelemetryMessage("/telemetry/accG/z", acsPhysicsData->accG[2]);
+	//sendFloatTelemetryMessage("/telemetry/accG/x", acsPhysicsData->accG[0]);
+	//sendFloatTelemetryMessage("/telemetry/accG/y", acsPhysicsData->accG[2]);
+	//sendFloatTelemetryMessage("/telemetry/accG/z", acsPhysicsData->accG[1]);
+	sendVec3fTelemetryMessage("/telemetry/accG", acsPhysicsData->accG[0], acsPhysicsData->accG[2], acsPhysicsData->accG[1]);
 
 	// velocity
-	sendFloatTelemetryMessage("/telemetry/velocity/x", acsPhysicsData->velocity[0]);
-	sendFloatTelemetryMessage("/telemetry/velocity/y", acsPhysicsData->velocity[1]);
-	sendFloatTelemetryMessage("/telemetry/velocity/z", acsPhysicsData->velocity[2]);
+	//sendFloatTelemetryMessage("/telemetry/velocity/x", acsPhysicsData->velocity[0]);
+	//sendFloatTelemetryMessage("/telemetry/velocity/y", acsPhysicsData->velocity[2]);
+	//sendFloatTelemetryMessage("/telemetry/velocity/z", acsPhysicsData->velocity[1]);
+	sendVec3fTelemetryMessage("/telemetry/velocity", acsPhysicsData->velocity[0], acsPhysicsData->velocity[2], acsPhysicsData->velocity[1]);
 
 	// tireTemp
-	sendFloatTelemetryMessage("/telemetry/tireTemp/fl", acsPhysicsData->tyreCoreTemperature[0]);
-	sendFloatTelemetryMessage("/telemetry/tireTemp/fr", acsPhysicsData->tyreCoreTemperature[1]);
-	sendFloatTelemetryMessage("/telemetry/tireTemp/rl", acsPhysicsData->tyreCoreTemperature[2]);
-	sendFloatTelemetryMessage("/telemetry/tireTemp/rr", acsPhysicsData->tyreCoreTemperature[3]);
+	//sendFloatTelemetryMessage("/telemetry/tireTemp/fl", acsPhysicsData->tyreCoreTemperature[0]);
+	//sendFloatTelemetryMessage("/telemetry/tireTemp/fr", acsPhysicsData->tyreCoreTemperature[1]);
+	//sendFloatTelemetryMessage("/telemetry/tireTemp/rl", acsPhysicsData->tyreCoreTemperature[2]);
+	//sendFloatTelemetryMessage("/telemetry/tireTemp/rr", acsPhysicsData->tyreCoreTemperature[3]);
+	sendVec4fTelemetryMessage("/telemetry/tireTemp", acsPhysicsData->tyreCoreTemperature[0], acsPhysicsData->tyreCoreTemperature[1], acsPhysicsData->tyreCoreTemperature[2], acsPhysicsData->tyreCoreTemperature[3]);
 
-	// 
+
 	sendIntTelemetryMessage("/telemetry/drsAvailable", acsPhysicsData->drsAvailable);
 	sendIntTelemetryMessage("/telemetry/drsEnabled", acsPhysicsData->drsEnabled);
 
 	// controller information
-
 	sendFloatTelemetryMessage("/controller/clutch", acsPhysicsData->clutch);
 	sendFloatTelemetryMessage("/controller/brake", acsPhysicsData->brake);
 	sendFloatTelemetryMessage("/controller/throttle", acsPhysicsData->gas);
@@ -458,6 +461,25 @@ void ofApp::sendStringTelemetryMessage(string addressEndpoint, string value) {
 	ofxOscMessage m;
 	m.setAddress(addressEndpoint);
 	m.addStringArg(value);
+	sender.sendMessage(m);
+}
+
+void ofApp::sendVec3fTelemetryMessage(string addressEndpoint, float x, float y, float z) {
+	ofxOscMessage m;
+	m.setAddress(addressEndpoint);
+	m.addFloatArg(x);
+	m.addFloatArg(y);
+	m.addFloatArg(z);
+	sender.sendMessage(m);
+}
+
+void ofApp::sendVec4fTelemetryMessage(string addressEndpoint, float x, float y, float z, float w) {
+	ofxOscMessage m;
+	m.setAddress(addressEndpoint);
+	m.addFloatArg(x);
+	m.addFloatArg(y);
+	m.addFloatArg(z);
+	m.addFloatArg(w);
 	sender.sendMessage(m);
 }
 
