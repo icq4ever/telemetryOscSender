@@ -3,7 +3,7 @@
 
 
 Telemetry::Telemetry() {
-	sender.setup("127.0.0.1", PORT);
+	sender.setup(HOST, PORT);
 }
 
 
@@ -139,25 +139,25 @@ void Telemetry::playLog() {
 //		cout << "play!!!" << endl;
 		if (ofGetElapsedTimeMillis() - lastPlayedTimer > 50) {
 
+			// static datas
 			// car, track, player
-//			sendStringTelemetryMessage("/playerInfo/carName", carModel);
-//			sendStringTelemetryMessage("/playerInfo/trackName", track);
-//			sendStringTelemetryMessage("/playerInfo/playerName", playerName);
+			sendStringTelemetryMessage("/playerInfo/carName", tStaticData.carInfo);
+			sendStringTelemetryMessage("/playerInfo/trackName", tStaticData.trackInfo);
+			sendStringTelemetryMessage("/playerInfo/playerName", tStaticData.playerName);
 //
 //			// car info
-//			sendFloatTelemetryMessage("/carInfo/maxTorque", acsStaticData->maxTorque);
-//			sendFloatTelemetryMessage("/carInfo/maxRPM", acsStaticData->maxRpm);
-//			sendIntTelemetryMessage("/carInfo/hasDRS", acsStaticData->hasDRS);
-//			sendIntTelemetryMessage("/carInfo/hasERS", acsStaticData->hasERS);
+			sendFloatTelemetryMessage("/carInfo/maxTorque", tStaticData.maxTorque);
+			sendFloatTelemetryMessage("/carInfo/maxRPM", tStaticData.maxRpm);
+			sendIntTelemetryMessage("/carInfo/hasDRS", tStaticData.hasDRS);
+			sendIntTelemetryMessage("/carInfo/hasERS", tStaticData.hasERS);
 
 			// lap info
-			//sendIntTelemetryMessage("/telemetry/completedLaps", telemetryBuffers[logPlayHead].completedLaps);
-			//sendStringTelemetryMessage("/telemetry/currentLapTime", wstring2string(acsGraphicsData->currentTime));
-			//sendStringTelemetryMessage("/telemetry/lastLapTime", wstring2string(acsGraphicsData->lastTime));
-			//sendStringTelemetryMessage("/telemetry/bestLapTime", wstring2string(acsGraphicsData->bestTime));
+			sendIntTelemetryMessage("/telemetry/completedLaps", tStaticData.completedLaps);
+			sendIntTelemetryMessage("/telemetry/lastLapTimeMillis", tStaticData.lastLapTimeMillis);
+			sendIntTelemetryMessage("/telemetry/bestLapTimeMillis", tStaticData.bestLapTimeMillis);
+
+
 			sendIntTelemetryMessage("/telemetry/currentLapTimeMillis", telemetryBuffers[logPlayHead].iCurrentTime);
-			//sendIntTelemetryMessage("/telemetry/lastLapTimeMillis", acsGraphicsData->iLastTime);
-			//sendIntTelemetryMessage("/telemetry/bestLapTimeMillis", acsGraphicsData->iBestTime);
 			sendFloatTelemetryMessage("/telemetry/normalizedCarPosition", telemetryBuffers[logPlayHead].normalizedCarPosition);
 
 			// car status

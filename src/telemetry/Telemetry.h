@@ -3,8 +3,8 @@
 #include "ofxJSON.h"
 #include "ofxOsc.h"
 
-//#define HOST "192.168.100.255"
-#define HOST "localhost"
+#define HOST "192.168.100.255"
+//#define HOST "localhost"
 #define PORT 9000
 
 
@@ -55,6 +55,7 @@ public:
 
 	// telemetry Buffer
 	vector<telemetryData> telemetryBuffers;
+	int completedLaps;
 
 	void push2Telemetry(telemetryData data);
 	void export2Json();
@@ -65,7 +66,7 @@ public:
 	void playLog();
 	uint64_t lastPlayedTimer;
 	unsigned int logPlayHead;
-	TStaticData tStaticData;
+	TstaticData tStaticData;
 
 	void sendIntTelemetryMessage(string addressEndpoint, int value);
 	void sendFloatTelemetryMessage(string addressEndpoint, float value);

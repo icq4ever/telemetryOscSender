@@ -467,6 +467,18 @@ void ofApp::sendBoolTelemetryMessage(string addressEndpoint, bool value) {
 }
 
 void ofApp::updateStaticData(){
+	telemetry.tStaticData.carInfo = wstring2string(acsStaticData->carModel);
+	telemetry.tStaticData.playerName = wstring2string(acsStaticData->playerName);
+	telemetry.tStaticData.trackInfo = wstring2string(acsStaticData->track);
+
+	telemetry.tStaticData.maxRpm = acsStaticData->maxRpm;
+	telemetry.tStaticData.maxTorque = acsStaticData->maxTorque;
+	telemetry.tStaticData.hasDRS = acsStaticData->hasDRS;
+	telemetry.tStaticData.hasERS = acsStaticData->hasERS;
+
+	telemetry.tStaticData.lastLapTimeMillis = acsGraphicsData->iLastTime;
+	telemetry.tStaticData.bestLapTimeMillis = acsGraphicsData->iBestTime;
+	telemetry.tStaticData.completedLaps = acsGraphicsData->completedLaps;
 //	telemetry.tStaticData.playerName = acsStaticData->playerName;
 //	telemetry.tStaticData.carINfo = acsStaticData->
 }
